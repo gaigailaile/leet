@@ -30,7 +30,31 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public List<String> generateParenthesis(int n) {
+        //回溯算法
+        List<String> res = new ArrayList<>();
+        generate(res,new StringBuffer(),0,0,n);
+        return res;
+    }
 
+    public void generate(List<String> res,StringBuffer str ,int left, int right, int n){
+        if(str.length() == 2 * n){
+            res.add(str.toString());
+            return;
+        }
+
+        if(left < n){
+            str.append("(");
+            generate(res,str,left+1,right,n);
+            //回溯
+            str.deleteCharAt(str.length() - 1);
+        }
+
+        if(right < left){
+            str.append(")");
+            generate(res,str,left,right+1,n);
+            //回溯
+            str.deleteCharAt(str.length() - 1);
+        }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
