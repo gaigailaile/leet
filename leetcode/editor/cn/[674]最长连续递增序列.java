@@ -37,7 +37,18 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int findLengthOfLCIS(int[] nums) {
-
+        //贪心
+        int start = 0;
+        int n = nums.length;
+        int ans = 0;
+        for (int i = 0; i < n; i++){
+            if(i > 0 && nums[i] <= nums[i-1]){
+                start = i;
+            }
+            //start为开始的位置，i为结束的位置
+            ans = Math.max(ans,i - start + 1);
+        }
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
