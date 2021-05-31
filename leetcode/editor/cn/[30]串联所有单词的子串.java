@@ -45,8 +45,38 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    //1.总共用到两个哈希表，allWords 用于记录words中单词出现的次数，subWords 用于记录子串中（也就是滑动窗口中）单词出现的次数
+    //2.wordNum 为单词的个数，wordLen为单词长度
+    //3.遍历字符串，移动长度为 wordNum * wordLen 的滑动窗口，再在当前滑动窗口中依次比较wordLen长度的单词
+    //4.当这个窗口内一旦出现不存在allWords中的单词，或者这个单词在子串中出现的次数已经等于allWords中的次数(也就是再加入这个子串次数就要超出了)，这个滑动窗口就不符合要求，直接break进入下一个滑动窗口的匹配
+    //5.一旦完全匹配上了，把滑动窗口的起始索引加入结果res中
     public List<Integer> findSubstring(String s, String[] words) {
+        //滑动窗口 + 哈希表
+        HashMap<String,Integer> allWords = new HashMap<>();
+        for (String word : words){
+            allWords.put(word,allWords.getOrDefault(word,0) + 1);
+        }
 
+        int wordNum = words.length, wordLen = words[0].length();
+        List<Integer> res = new ArrayList<>();
+        //s.length() - wordNum * wordLen + 1
+        // 当 i = s.length() - wordNum * wordLen + 1 后面的字符数量已经不足以组成全部子串了
+        for(int i = 0; i < s.length() - wordNum * wordLen + 1; i++){
+            HashMap<String,Integer> subWords = new HashMap<>();
+            int index = i;
+            while (index < i + wordNum * wordLen){
+                String curWord = s.substring(index,index + wordLen);
+                if(!allWords.containsKey(curWord) || subWords.get(curWord) == allWords.get(curWord)){
+                    break;
+                }
+                subWords.put(curWord,subWords.getOrDefault(curWord,0) + 1);
+                index = index + wordLen;
+            }
+            if(index == i + wordNum * wordLen){
+                res.add(i);
+            }
+        }
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
