@@ -32,8 +32,42 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    int n;
+    boolean[][] f;
+    List<String> ans = new ArrayList<>();
+    List<List<String>> ret = new ArrayList<>();
     public List<List<String>> partition(String s) {
+        //动态规划 + 回溯
+        n = s.length();
+        f = new boolean[n][n];
+        //一位均为回文串
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(f[i],true);
+        }
 
+        for(int i = n - 1; i >= 0; i--){
+            for (int j = i + 1; j < n; j++){
+                //首尾相同且f[i + 1][j - 1]为回文串时，才是一个新的回文串
+                f[i][j] = (s.charAt(i) == s.charAt(j)) && f[i + 1][j - 1];
+            }
+        }
+
+        dfs(s,0);
+        return ret;
+    }
+
+    public void dfs(String s,int i){
+        if(i == n){
+            ret.add(new ArrayList<String>(ans));
+            return;
+        }
+        for (int j = i; j < n; j++){
+            if(f[i][j]){
+                ans.add(s.substring(i,j + 1));
+                dfs(s,j + 1);
+                ans.remove(ans.size() - 1);
+            }
+        }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
