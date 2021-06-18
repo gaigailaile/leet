@@ -45,12 +45,13 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int minCut(String s) {
+        //两次动态规划
         int n = s.length();
         boolean[][] g = new boolean[n][n];
         for (int i = 0; i < n; i++){
             Arrays.fill(g[i],true);
         }
-        for(int i = n - 1; i >= 0; i++){
+        for(int i = n - 1; i >= 0; i--){
             for(int j = i + 1; j < n; ++j){
                 g[i][j] = s.charAt(i) == s.charAt(j) && g[i + 1][j - 1];
             }
@@ -62,12 +63,13 @@ class Solution {
                 f[i] = 0;
             }else {
                 for (int j = 0; j < i; j++){
-                    if(){
-
+                    if(g[j + 1][i]){
+                        f[i] = Math.min(f[i],f[j] + 1);
                     }
                 }
             }
         }
+        return f[n - 1];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
